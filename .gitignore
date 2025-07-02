@@ -5,7 +5,11 @@
 *.txt
 *.jpg
 *.jpeg
+*.json
+*.yaml
+
 .DS_Store
+.claude
 
 !requirements.txt
 !Readme.md

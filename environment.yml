@@ -12,6 +12,7 @@ dependencies:
   - weasyprint
   - pathlib
   - argparse
+  - pywebview
   - pip:
     - lxml
     - Pillow

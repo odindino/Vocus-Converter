@@ -14,6 +14,7 @@ from pathlib import Path
 from urllib.parse import urlparse, unquote
 from bs4 import BeautifulSoup
 import html2text
+
 from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
 
@@ -21,7 +22,7 @@ from weasyprint.text.fonts import FontConfiguration
 class VocusArticleConverter:
     """方格子文章轉換器"""
     
-    def __init__(self, input_file, output_dir="output", images_dir="images"):
+    def __init__(self, input_file, output_dir="output", images_dir="images", image_progress_callback=None):
         self.input_file = Path(input_file)
         self.output_dir = Path(output_dir)
         self.images_dir = Path(images_dir)
@@ -39,6 +40,11 @@ class VocusArticleConverter:
         self.last_modified = ""  # 最後修改時間
         self.content_html = ""
         self.images = []  # 儲存圖片資訊
+        
+        # 進度回調函數
+        self.image_progress_callback = image_progress_callback
+        self.total_images = 0
+        self.downloaded_images = 0
         
     def parse_html(self):
         """解析HTML檔案，提取文章內容"""
@@ -355,7 +361,14 @@ class VocusArticleConverter:
         success_count = 0
         fail_count = 0
         
-        for img_info in self.images:
+        self.total_images = len(self.images)
+        self.downloaded_images = 0
+        
+        # 發送初始進度
+        if self.image_progress_callback:
+            self.image_progress_callback(0, self.total_images)
+        
+        for idx, img_info in enumerate(self.images):
             # 嘗試多種下載策略
             download_success = False
             
@@ -399,10 +412,15 @@ class VocusArticleConverter:
             
             if download_success:
                 success_count += 1
+                self.downloaded_images += 1
             else:
                 fail_count += 1
                 print(f"  → 所有策略都失敗了，請手動下載: {img_info['url']}")
                 print(f"  → 目標位置: {img_info['local_path']}")
+            
+            # 更新進度
+            if self.image_progress_callback:
+                self.image_progress_callback(self.downloaded_images, self.total_images)
         
         print(f"\n下載完成：成功 {success_count} 個，失敗 {fail_count} 個")
     
@@ -620,10 +638,9 @@ class VocusArticleConverter:
         pdf_path = self.output_dir / "pdf" / filename
         
         try:
-            HTML(string=full_html, base_url=str(Path.cwd())).write_pdf(
-                pdf_path,
-                font_config=font_config
-            )
+            # Create HTML document and write PDF
+            html_doc = HTML(string=full_html)
+            html_doc.write_pdf(pdf_path, font_config=font_config)
             print(f"PDF檔案已儲存至: {pdf_path}")
         except Exception as e:
             print(f"PDF轉換失敗: {str(e)}")

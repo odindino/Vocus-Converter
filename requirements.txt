@@ -32,3 +32,6 @@ loguru==0.7.2               # 增強的日誌功能
 # 可選：配置文件處理
 pyyaml==6.0.1               # YAML 配置文件支援
 click==8.1.7                # 命令行介面
+
+# GUI 支援
+pywebview==4.4.1            # Web GUI framework
