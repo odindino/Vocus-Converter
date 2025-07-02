@@ -1,0 +1,17 @@
+name: vocus-converter
+channels:
+  - conda-forge
+  - defaults
+  - anaconda
+dependencies:
+  - python > 3.9
+  - pip
+  - beautifulsoup4
+  - requests
+  - html2text
+  - weasyprint
+  - pathlib
+  - argparse
+  - pip:
+    - lxml
+    - Pillow

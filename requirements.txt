@@ -1,0 +1,34 @@
+# HTML to PDF/Markdown 轉換工具
+# 核心依賴
+beautifulsoup4==4.12.2      # HTML 解析
+lxml==4.9.3                 # XML/HTML 解析器 (更快的解析引擎)
+html2text==2020.1.16        # HTML 轉 Markdown
+requests==2.31.0            # HTTP 請求 (如果需要下載或驗證)
+
+# PDF 生成工具 (選擇其中一個或多個)
+weasyprint==60.2            # HTML/CSS 轉 PDF (推薦，支援 CSS)
+reportlab==4.0.4            # 純 Python PDF 生成
+pdfkit==1.0.0               # wkhtmltopdf 的 Python 包裝 (需要額外安裝 wkhtmltopdf)
+
+# 文本處理和清理
+markdownify==0.11.6         # 另一個 HTML 轉 Markdown 選項
+bleach==6.1.0               # HTML 清理和淨化
+python-dateutil==2.8.2     # 日期處理
+
+# 文件和路徑處理
+pathlib2==2.3.7.post1      # 增強的路徑處理 (Python 3.4+ 兼容)
+
+# 開發和測試工具
+pytest==7.4.3              # 單元測試
+pytest-cov==4.1.0          # 測試覆蓋率
+black==23.11.0              # 代碼格式化
+flake8==6.1.0               # 代碼風格檢查
+isort==5.12.0               # import 排序
+
+# 可選：進度條和日誌
+tqdm==4.66.1                # 進度條
+loguru==0.7.2               # 增強的日誌功能
+
+# 可選：配置文件處理
+pyyaml==6.0.1               # YAML 配置文件支援
+click==8.1.7                # 命令行介面

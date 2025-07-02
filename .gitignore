@@ -1,0 +1,11 @@
+*.pdf
+*.md
+*.png
+*.html
+*.txt
+*.jpg
+*.jpeg
+.DS_Store
+
+!requirements.txt
+!Readme.md
