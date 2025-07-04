@@ -15,8 +15,14 @@ from urllib.parse import urlparse, unquote
 from bs4 import BeautifulSoup
 import html2text
 
-from weasyprint import HTML, CSS
-from weasyprint.text.fonts import FontConfiguration
+try:
+    from weasyprint import HTML, CSS
+    from weasyprint.text.fonts import FontConfiguration
+    WEASYPRINT_AVAILABLE = True
+except ImportError:
+    WEASYPRINT_AVAILABLE = False
+
+from utils.pdf_generator import generate_pdf
 
 
 class VocusArticleConverter:
@@ -637,14 +643,24 @@ class VocusArticleConverter:
         filename = f"{date_prefix}_{safe_title}.pdf"
         pdf_path = self.output_dir / "pdf" / filename
         
-        try:
-            # Create HTML document and write PDF
-            html_doc = HTML(string=full_html)
-            html_doc.write_pdf(pdf_path, font_config=font_config)
+        # 使用新的PDF生成器
+        success, error_message = generate_pdf(full_html, str(pdf_path))
+        
+        if success:
             print(f"PDF檔案已儲存至: {pdf_path}")
-        except Exception as e:
-            print(f"PDF轉換失敗: {str(e)}")
-            print("提示：請確保已安裝weasyprint及其依賴項")
+        else:
+            if WEASYPRINT_AVAILABLE:
+                # 如果WeasyPrint可用但失敗，嘗試使用原始方法
+                try:
+                    html_doc = HTML(string=full_html)
+                    html_doc.write_pdf(pdf_path, font_config=font_config)
+                    print(f"PDF檔案已儲存至: {pdf_path}")
+                except Exception as e:
+                    print(f"PDF轉換失敗: {error_message}")
+                    raise
+            else:
+                print(f"PDF轉換失敗: {error_message}")
+                raise Exception(error_message)
         
         return pdf_path
     

@@ -146,10 +146,29 @@ class API:
             })
             
             try:
+                # Determine output and images directories
+                try:
+                    # Check if running as packaged app
+                    if hasattr(sys, '_MEIPASS'):
+                        # Running as packaged app - use user's Documents folder
+                        home_dir = Path.home()
+                        base_dir = home_dir / "VocusConverter"
+                        output_dir = str(base_dir / "output")
+                        images_dir = str(base_dir / "images")
+                    else:
+                        # Running from source - use current directory
+                        output_dir = "output"
+                        images_dir = "images"
+                except Exception:
+                    # Fallback
+                    output_dir = "output"
+                    images_dir = "images"
+                
                 # Create converter with progress callback
-                # Use absolute path directly since VocusArticleConverter can handle it
                 converter = VocusArticleConverter(
                     file_path,
+                    output_dir=output_dir,
+                    images_dir=images_dir,
                     image_progress_callback=self._image_progress_callback
                 )
                 
@@ -324,8 +343,24 @@ class API:
     def _generate_report(self, results):
         """Generate conversion report in JSON and YAML formats"""
         timestamp = datetime.now().strftime("%Y%m%d%H%M")
-        report_dir = Path("output/report")
-        report_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Use user's home directory for output in packaged app
+        try:
+            # Check if running as packaged app
+            if hasattr(sys, '_MEIPASS'):
+                # Running as packaged app - use user's Documents folder
+                home_dir = Path.home()
+                base_dir = home_dir / "VocusConverter"
+            else:
+                # Running from source - use current directory
+                base_dir = Path.cwd()
+            
+            report_dir = base_dir / "output" / "report"
+            report_dir.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            # Fallback to current directory
+            report_dir = Path("output/report")
+            report_dir.mkdir(parents=True, exist_ok=True)
         
         # Prepare report data
         report_data = {

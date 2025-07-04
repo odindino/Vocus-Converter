@@ -7,9 +7,11 @@
 *.jpeg
 *.json
 *.yaml
-
+*.spec
 .DS_Store
 .claude
+*.pyc
 
 !requirements.txt
 !Readme.md
+!index.html
