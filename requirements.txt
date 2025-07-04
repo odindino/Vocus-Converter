@@ -35,3 +35,5 @@ click==8.1.7                # 命令行介面
 
 # GUI 支援
 pywebview==4.4.1            # Web GUI framework
+
+pyyaml==6.0.1               # YAML 配置文件支援
