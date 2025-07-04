@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocus Article Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Vocus Article Converter</h1>
+
+        <div class="file-selection">
+            <button id="selectFiles" class="btn btn-primary">選擇HTML檔案</button>
+            <input type="file" id="fileInput" accept=".html" multiple style="display: none;">
+        </div>
+
+        <div class="file-panel">
+            <h3>已選擇的檔案：</h3>
+            <div id="fileList" class="file-list"></div>
+        </div>
+
+        <div class="conversion-options">
+            <label class="checkbox-label">
+                <input type="checkbox" id="convertPdf" checked>
+                <span>轉換為 PDF</span>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="convertMd" checked>
+                <span>轉換為 Markdown</span>
+            </label>
+        </div>
+
+        <div class="control-buttons">
+            <button id="startConvert" class="btn btn-success" disabled>開始轉換</button>
+            <button id="pauseConvert" class="btn btn-warning" disabled>暫停</button>
+            <button id="stopConvert" class="btn btn-danger" disabled>中止</button>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-item">
+                <label>總體進度：</label>
+                <div class="progress-bar">
+                    <div id="overallProgress" class="progress-fill"></div>
+                </div>
+                <span id="overallProgressText" class="progress-text">0 / 0 檔案</span>
+            </div>
+
+            <div class="progress-item">
+                <label>當前檔案圖片下載：</label>
+                <div class="progress-bar">
+                    <div id="currentProgress" class="progress-fill"></div>
+                </div>
+                <span id="currentProgressText" class="progress-text">0 / 0 圖片</span>
+            </div>
+        </div>
+
+        <div class="status-section">
+            <h3>轉換狀態：</h3>
+            <div id="statusLog" class="status-log"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
